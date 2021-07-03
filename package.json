@@ -1,0 +1,31 @@
+{
+  "name": "image-uploader",
+  "version": "1.0.0",
+  "description": "upload images",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Terro216/image-uploader.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Terro216/image-uploader/issues"
+  },
+  "homepage": "https://github.com/Terro216/image-uploader#readme",
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.14.5",
+    "parcel-bundler": "^1.12.5",
+    "sass": "^1.35.1"
+  }
+}
