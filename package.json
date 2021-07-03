@@ -5,8 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "run": "parcel index.html",
-    "build": "parcel build index.html"
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
+    "deploy": "npm run build && firebase deploy"
   },
   "repository": {
     "type": "git",
@@ -20,12 +21,16 @@
   },
   "homepage": "https://github.com/Terro216/image-uploader#readme",
   "dependencies": {
+    "@material-ui/core": "^4.11.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
+    "firebase": "^8.7.0",
+    "firebase-admin": "^9.10.0",
     "parcel-bundler": "^1.12.5",
+    "react-dropzone": "^11.3.4",
     "sass": "^1.35.1"
   }
 }
