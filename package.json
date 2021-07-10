@@ -29,7 +29,6 @@
     "@babel/preset-react": "^7.14.5",
     "firebase": "^8.7.0",
     "parcel-bundler": "^1.12.5",
-    "react-spring": "^9.2.3",
     "sass": "^1.35.1"
   }
 }

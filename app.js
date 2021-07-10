@@ -8,12 +8,15 @@ import {
   CardContent,
   Typography,
   CardActionArea,
+  Slide,
+  LinearProgress,
+  TextField,
+  CardMedia
 } from "@material-ui/core"
 import firebase from "firebase"
-import API from "./api.js"
 
 firebase.initializeApp({
-  apiKey: API,
+  apiKey: 'AIzaSyAcC9OhWMoVvr_q58lmobGTDK7ajuOjwlE',
   authDomain: "image-uploader-111.firebaseapp.com",
   databaseURL: "https://image-uploader-111-default-rtdb.firebaseio.com",
   projectId: "image-uploader-111",
@@ -34,9 +37,20 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
   },
-  card: {
+  card1: {
+    width: "50%",
+    height: "65%"
+  },
+  card2: {
+    width: '20%',
+    height: '30%'
+  },
+  card3: {
     width: "40%",
     height: "60%",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   title: {
     textAlign: "center",
@@ -44,8 +58,8 @@ const useStyles = makeStyles({
   sub: {
     textAlign: "center",
   },
-  hide: {
-    display: "none",
+  progress: {
+    marginTop: '10%'
   },
   fileLabel: {
     height: "100%",
@@ -62,55 +76,62 @@ const useStyles = makeStyles({
     borderRadius: "12px",
   },
   choose: {
-    padding: "10px",
     background: "#2F80ED",
     borderRadius: "8px",
     color: "white",
-    padding: "5%",
-  },
-  show: {
-    animationName:'$show',
-  },
-  hide: {
-    animationName:'$hide',
+    padding: "3%",
   },
   hidden: {
-    display: 'none'
+    display:'none'
   },
-  '@keyframes show': {
-    from: {x: -10000},
-    to: {x: 0}
-  },
-  '@keyframes hide': {
-    from: {opacity: 0},
-    to: {opacity: 1}
-  },
+  media: {
+      maxWidth: "50%",
+      maxHeight: "50%"
+  }
 })
 
 function App() {
   const classes = useStyles()
-  const [stage,changeStage] = useState(0)
+  const [stage, changeStage] = useState({
+  card1: {
+    in: true,
+    direction: 'right'
+  }, card2: {
+    in: false,
+    direction: 'right'
+  }, card3: {
+    in: false,
+    direction: 'right'
+  }
+})
 
   function preventDefaults(e) {
     e.preventDefault()
     e.stopPropagation()
   }
-  function highlight(e) {
-    let dropArea = document.getElementById("drop-area")
-    dropArea.classList.toggle("highlight")
-  }
-  function unhighlight(e) {
+  function highlightToggle(e) {
     let dropArea = document.getElementById("drop-area")
     dropArea.classList.toggle("highlight")
   }
   function getFiles(e) {
-    console.log(e)
+    //console.log(e)
     let files = e.target.files || e.dataTransfer.files
-    changeStage(2)
-    document.getElementById('card1').classList.add('hide')
-    for (let i = 0; i < files.length; i++) {
-      handleSubmit(files[i])
+    //let length = files.length<=20?files.length:20
+    changeStage({
+    card1: {
+      in: false,
+      direction: 'left'
+    }, card2: {
+      in: true,
+      direction: 'right'
+    }, card3: {
+      in: false,
+      direction: 'right'
     }
+  })
+  document.getElementById('card1').style.display='none'
+    //for (let i = 0; i < length; i++) {
+    handleSubmit(files[0])
   }
 
   useEffect(() => {
@@ -121,7 +142,7 @@ function App() {
       "dragenter",
       (e) => {
         preventDefaults(e)
-        highlight(e)
+        highlightToggle(e)
       },
       false
     )
@@ -136,7 +157,7 @@ function App() {
       "dragleave",
       (e) => {
         preventDefaults(e)
-        unhighlight(e)
+        highlightToggle(e)
       },
       false
     )
@@ -144,7 +165,7 @@ function App() {
       "drop",
       (e) => {
         preventDefaults(e)
-        unhighlight(e)
+        highlightToggle(e)
         getFiles(e)
       },
       false
@@ -152,20 +173,19 @@ function App() {
 
     input.addEventListener("change", (e)=>{getFiles(e)}, false)
 
-    document.getElementById('card1').classList.add('show')
-
   })
+
   const handleSubmit = (imageFile) => {
     const imageUpload = storage.ref(`images/${imageFile.name}`).put(imageFile)
     imageUpload.on(
       "state_changed",
       (snapshot) => {
-        //process fun here
-        console.log(snapshot)
+        //process here
+        //console.log(snapshot)
       },
       (error) => {
-        //error fun here
-        console.log(error)
+        //error here
+        //console.log(error)
       },
       () => {
         storage
@@ -173,7 +193,19 @@ function App() {
           .child(imageFile.name)
           .getDownloadURL()
           .then((url) => {
-            console.log(url)
+            changeStage({
+            card1: {in:false,direction:'right'},
+            card2: {
+              in: false,
+              direction: 'left'
+            },
+            card3: {
+              in: true,
+              direction:'right'
+            }
+          })
+            document.getElementById('link').value=url
+            document.getElementById('img').src=url
           })
       }
     )
@@ -181,19 +213,20 @@ function App() {
 
   return (
     <div className={classes.wrapper}>
-        <Card className={classes.card} id='card1'> 
+    <Slide direction={stage.card1.direction} id='card1' in={stage.card1.in} >
+        <Card className={classes.card1} >
           <CardContent>
-            <Typography 
+            <Typography
               className={classes.title}
               variant="h4"
               color="textPrimary">
-              Upload Your images
+              Upload Your Image
             </Typography>
             <Typography
               className={classes.sub}
               color="textSecondary"
               variant="subtitle1">
-              jpg, jpeg, png, etc
+              jpg, jpeg, png, etc.
             </Typography>
           </CardContent>
           <CardActionArea>
@@ -201,9 +234,8 @@ function App() {
               <input
                 type="file"
                 id="inp"
-                className={classes.hide}
+                className={classes.hidden}
                 accept="image/*"
-                multiple
               />
               <Box id="drop-area" className={classes.dragdrop}>
                 Drag and Drop your image here
@@ -215,10 +247,40 @@ function App() {
             </label>
           </CardActionArea>
         </Card>
+</Slide>
+<Slide direction={stage.card2.direction}  in={stage.card2.in} mountOnEnter unmountOnExit>
+        <Card className={classes.card2} id='card2'>
+          <CardContent>
+        <Typography variant="body1" color="textPrimary" className={classes.title}>Uploading...</Typography>
+        <LinearProgress className={classes.progress}/>
+          </CardContent>
 
-        <Card className={classes.card,classes.hidden} id='card2'>
-          card2
         </Card>
+        </Slide>
+
+<Slide direction={stage.card3.direction} id='card3' in={stage.card3.in} mountOnEnter unmountOnExit>
+        <Card className={classes.card3}>
+        <CardContent>
+          <Typography variant="body1" color="textPrimary" className={classes.title}>Uploaded Successfully!</Typography>
+            <CardMedia
+            component="img"
+            className={classes.media}
+            image=""
+            title="Photo"
+            id='img'
+            />
+            <p/>
+            <TextField
+            id="link"
+            label="Link"
+            defaultValue="Your link should be here"
+            InputProps={{
+              readOnly: true,
+            }}
+            />
+        </CardContent>
+        </Card>
+</Slide>
     </div>
   )
 }
