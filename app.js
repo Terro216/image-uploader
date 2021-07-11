@@ -8,10 +8,13 @@ import {
   CardContent,
   Typography,
   CardActionArea,
+  CardActions, 
   Slide,
   LinearProgress,
   TextField,
-  CardMedia
+  CardMedia,
+  Container,
+  Button
 } from "@material-ui/core"
 import firebase from "firebase"
 
@@ -29,7 +32,7 @@ firebase.analytics()
 
 const storage = firebase.storage()
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
   wrapper: {
     width: "100vw",
     height: "100vh",
@@ -39,18 +42,20 @@ const useStyles = makeStyles({
   },
   card1: {
     width: "50%",
-    height: "65%"
+    height: "60%"
   },
   card2: {
-    width: '20%',
-    height: '30%'
+    width: '30%',
+    height: '35%'
   },
   card3: {
-    width: "40%",
-    height: "60%",
-    display: 'flex',
+    width: "60%",
+    height: "75%",
+    margin:'0 auto',
+    display:'flex',
+    justifyContent:'space-around',
+    alignItems:'center',
     flexDirection: 'column',
-    alignItems: 'center'
   },
   title: {
     textAlign: "center",
@@ -59,7 +64,7 @@ const useStyles = makeStyles({
     textAlign: "center",
   },
   progress: {
-    marginTop: '10%'
+    marginTop: '50%'
   },
   fileLabel: {
     height: "100%",
@@ -84,11 +89,22 @@ const useStyles = makeStyles({
   hidden: {
     display:'none'
   },
-  media: {
-      maxWidth: "50%",
-      maxHeight: "50%"
+  mediaImg: {
+    maxWidth: "30vw",
+    maxHeight: "30vh",
+    borderRadius: '20px',
+    display:'flex',
+    justifyContent:'center',
+    alignItems: 'center'
+  },
+  textLink: {
+    width:'100%',
+    display:'flex',
+    justifyContent:'center',
+    alignItems: 'center'
   }
-})
+
+}))
 
 function App() {
   const classes = useStyles()
@@ -212,7 +228,7 @@ function App() {
   }
 
   return (
-    <div className={classes.wrapper}>
+    <Container className={classes.wrapper}>
     <Slide direction={stage.card1.direction} id='card1' in={stage.card1.in} >
         <Card className={classes.card1} >
           <CardContent>
@@ -259,17 +275,19 @@ function App() {
         </Slide>
 
 <Slide direction={stage.card3.direction} id='card3' in={stage.card3.in} mountOnEnter unmountOnExit>
+        
         <Card className={classes.card3}>
         <CardContent>
           <Typography variant="body1" color="textPrimary" className={classes.title}>Uploaded Successfully!</Typography>
-            <CardMedia
+            <Container><CardMedia
+            className={classes.mediaImg}
             component="img"
-            className={classes.media}
             image=""
             title="Photo"
             id='img'
-            />
-            <p/>
+            /></Container></CardContent>
+            <CardActions 
+            className={classes.textLink}>
             <TextField
             id="link"
             label="Link"
@@ -278,10 +296,13 @@ function App() {
               readOnly: true,
             }}
             />
-        </CardContent>
+            <Button variant="contained" color="primary" id='copy' className={classes.copy} onClick={() => {
+              navigator.clipboard.writeText(document.getElementById('link').value)
+              document.getElementById('copy').innerText='Copied!'}}>Copy</Button>
+        </CardActions>
         </Card>
 </Slide>
-    </div>
+    </Container>
   )
 }
 
