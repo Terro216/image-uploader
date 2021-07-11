@@ -89,13 +89,15 @@ const useStyles = makeStyles((theme)=>({
   hidden: {
     display:'none'
   },
-  mediaImg: {
-    maxWidth: "30vw",
-    maxHeight: "30vh",
+  mediaImgWrapper: {
+    marginTop:'5%',
+    width:'60vw',
+    height:'50vh'
+  },mediaImg: {
+    maxHeight: "100%",
+    maxWidth: "100%",
     borderRadius: '20px',
-    display:'flex',
-    justifyContent:'center',
-    alignItems: 'center'
+    objectFit:'contain'
   },
   textLink: {
     width:'100%',
@@ -278,8 +280,10 @@ function App() {
         
         <Card className={classes.card3}>
         <CardContent>
-          <Typography variant="body1" color="textPrimary" className={classes.title}>Uploaded Successfully!</Typography>
-            <Container><CardMedia
+          <Typography className={classes.title}
+              variant="h4"
+              color="textPrimary" className={classes.title}>Uploaded Successfully!</Typography>
+            <Container className={classes.mediaImgWrapper}><CardMedia
             className={classes.mediaImg}
             component="img"
             image=""
