@@ -44,7 +44,7 @@
 
 - [React](https://reactjs.org/)
 - [Material-UI](https://material-ui.com/ru/)
-- [Parcel](https://parceljs.org/))
+- [Parcel](https://parceljs.org/)
 
 ## Features
 
